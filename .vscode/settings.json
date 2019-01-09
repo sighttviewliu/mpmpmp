@@ -1,0 +1,4 @@
+{
+    "php.executablePath": "/opt/lampp/bin/php",
+    "phpcs.executablePath": "./php/vendor/squizlabs/php_codesniffer/bin/phpcs"
+}

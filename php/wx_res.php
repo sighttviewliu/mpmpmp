@@ -114,10 +114,38 @@
                     $contentStr = "link title is ".$title;
                     break;
                 }
+                
+                // $msgType = "text";
+                // $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
+                // echo $resultStr;
 
-                $msgType = "text";
-                $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
-                echo $resultStr;
+                if ($keyword == "aaa")
+                {
+                    $musicTpl = "<xml>
+                    <ToUserName><![CDATA[%s]]></ToUserName>
+                    <FromUserName><![CDATA[%s]]></FromUserName>
+                    <CreateTime>%s</CreateTime>
+                    <MsgType><![CDATA[%s]]></MsgType>
+                    <Music>
+                    <Title><![CDATA[%s]]></Title>
+                    <Description><![CDATA[%s]]></Description>
+                    <MusicUrl><![CDATA[%s]]></MusicUrl>
+                    <HQMusicUrl><![CDATA[%s]]></HQMusicUrl>
+                    </Music>
+                    </xml>";
+
+                    $msgType = "music";
+                    $title = "aaa";
+                    $description = "bbb";
+                    $url = "http://url.mcvmc.com/qq.php/221569632.mp3";
+                    $resultStr = sprintf($musicTpl, $fromUsername, $toUsername, $time, 
+                    $msgType, $title, $description, $url, $url);
+                    echo $resultStr;
+                }
+                else {
+                    echo "nothing to do!";
+                }
+                
             }
             else {
                 echo "";

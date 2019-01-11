@@ -87,6 +87,32 @@
                         break;
                     }
                     break;
+
+                    case "image":
+                    $picUrl = $postObj->picUrl;
+                    $contentStr = "image url ".$picUrl;
+                    break;
+
+                    case "voice":
+                    $format = $postObj->Format;
+                    $recog = $postObj->Recognition;
+                    $contentStr = "voice format is ".$format."conetnt is ".$recog;
+                    break;
+
+                    case "video":
+                    $contentStr = "video video...";
+                    break;
+
+                    case "location":
+                    $locationx = $postObj->location_X;
+                    $locationy = $postObj->location_Y;
+                    $contentStr = "map position x is ".$locationx." y is ".$locationy;
+                    break;
+
+                    case "link":
+                    $title = $postObj->Title;
+                    $contentStr = "link title is ".$title;
+                    break;
                 }
 
                 $msgType = "text";

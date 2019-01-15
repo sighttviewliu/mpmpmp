@@ -128,18 +128,65 @@
                     break;
 
                     case "text":
+                    // switch ($keyword)
+                    // {
+                    //     case "1":
+                    //     $contentStr = "123";
+                    //     break;
+
+                    //     case "2":
+                    //     $contentStr = "ABC";
+                    //     break;
+
+                    //     case "3":
+                    //     $contentStr = "xyz";
+                    //     break;
+
+                    //     default:
+                    //     $contentStr = "nothing found!";
+                    //     break;
+                    // }
+                    // break;
                     switch ($keyword)
                     {
-                        case "1":
-                        $contentStr = "123";
+                        case "c":
+                        // $mysql = new SaeMysql();
+                        // $sql = "intsert into 'weixin' ('id', 'title', 'content') values (null, 'what is your name', 'who is your name');"
+                        // $mysql->runSql($sql);
+                        $contentStr = "insert a record success";
                         break;
 
-                        case "2":
-                        $contentStr = "ABC";
+                        case "d":
+                        $contentStr = "delete a record success";
                         break;
 
-                        case "3":
-                        $contentStr = "xyz";
+                        case "u":
+                        $contentStr = "update a record success";
+                        break;
+
+                        case "r":
+                        // for mysql driver
+                        // if ($mysqli->connect_error) {
+                        //     exit($mysqli->connect_error);
+                        // }
+                        // $mysqli->close();
+                    
+                        // for pdo
+                        // try {
+                            
+                            $sql = "select * from weixin where title = 'r'";
+                            foreach ($pdo->query($sql) as $row)
+                            {
+                                // $contentStr = "query a record success";
+                                $contentStr = $row['content'];
+                            }
+                        // } catch (PDOException $e) {
+                        //     //$contentStr = "error!";
+                        //     //$contentStr = $e->getMessage();
+                        //     //die(); exit();
+                        // } finally { //only php7+
+                        //     $pdo = null;//release this inst
+                        // }
                         break;
 
                         default:
@@ -148,34 +195,34 @@
                     }
                     break;
 
-                    case "image":
-                    $picUrl = $postObj->picUrl;
-                    $contentStr = "image url ".$picUrl;
-                    break;
+                    // case "image":
+                    // $picUrl = $postObj->picUrl;
+                    // $contentStr = "image url ".$picUrl;
+                    // break;
 
-                    case "voice":
-                    $format = $postObj->Format;
-                    $recog = $postObj->Recognition;
-                    $contentStr = "voice format is ".$format."conetnt is ".$recog;
-                    break;
+                    // case "voice":
+                    // $format = $postObj->Format;
+                    // $recog = $postObj->Recognition;
+                    // $contentStr = "voice format is ".$format."conetnt is ".$recog;
+                    // break;
 
-                    case "video":
-                    $contentStr = "video video...";
-                    break;
+                    // case "video":
+                    // $contentStr = "video video...";
+                    // break;
 
-                    case "location":
-                    $title = urldecode("腾讯");
-                    $content = urlencode("腾讯");
-                    $contentStr = "<a href=\"http://api.map.baidu.com/marker?location=40.047669,116.313082&title={$title}&content={$content}&output=html&src=webapp.baidu.openAPIdemo\">linklinklin</a>";
-                    // $locationx = $postObj->location_X;
-                    // $locationy = $postObj->location_Y;
-                    // $contentStr = "map position x is ".$locationx." y is ".$locationy;
-                    break;
+                    // case "location":
+                    // $title = urldecode("腾讯");
+                    // $content = urlencode("腾讯");
+                    // $contentStr = "<a href=\"http://api.map.baidu.com/marker?location=40.047669,116.313082&title={$title}&content={$content}&output=html&src=webapp.baidu.openAPIdemo\">linklinklin</a>";
+                    // // $locationx = $postObj->location_X;
+                    // // $locationy = $postObj->location_Y;
+                    // // $contentStr = "map position x is ".$locationx." y is ".$locationy;
+                    // break;
 
-                    case "link":
-                    $title = $postObj->Title;
-                    $contentStr = "link title is ".$title;
-                    break;
+                    // case "link":
+                    // $title = $postObj->Title;
+                    // $contentStr = "link title is ".$title;
+                    // break;
                 }
                 
                 $msgType = "text";

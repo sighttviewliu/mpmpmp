@@ -33,6 +33,7 @@
         }  
 
         public function responseMSG() {
+            //////////////////
 
             ##$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
             //huo de nei rong
@@ -41,9 +42,12 @@
 
             if (!empty($postStr)) {
 
+                /////////xml xml xml
                 libxml_disable_entity_loader(true);
                 ##xml parser | type = SimpleXMLElement
                 $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+                /////////////get xml elements
                 $fromUsername = $postObj->FromUserName;
                 $toUsername = $postObj->ToUserName;
                 $msgType = $postObj->MsgType;
@@ -109,6 +113,9 @@
                 // }
 
 
+
+
+
                 $textTpl = "<xml>
                                 <ToUserName><![CDATA[%s]]></ToUserName>
                                 <FromUserName><![CDATA[%s]]></FromUserName>
@@ -118,16 +125,54 @@
                                 <FuncFlag>0</FuncFlag>
                             </xml>";
 
+
+
+
+
                 switch ($msgType)
                 {
                     case "event":
                     if ($event == "subscribe")
                     {
-                        $contentStr = "------ \n press 1 \n press 2 \n press 3";
+                        // $contentStr = "------ \n press 1 \n press 2 \n press 3";
+                        $sql = "select * from user where openid='{$fromUsername}';";
+                        $stmt = $pdo->query($sql);
+                        while ($row = $stmt->fetch()) {
+                            $user = $row['openid'];
+                        }
+
+                        if (empty($user))
+                        {
+                            $sql = "insert into user (id,openid,menu) values (null,'$fromUsername',0);";
+                            $stmt = $pdo->exec($sql);
+                            $contentStr = "welcome new user\n press 1 to AAA\n press 2 to BBB";
+                        }
+                        $pdo = null;
+                    }
+                    else if ($event == "unsubscribe")
+                    {
+                        $sql = "select * from user where openid='{$fromUsername}';";
+                        $stmt = $pdo->query($sql);
+                        while ($row = $stmt->fetch()) {
+                            $user = $row['openid'];
+                        }
+
+                        //delete this user from db by openid
+                        if (!empty($user))
+                        {
+                            $sql = "delete from user where openid='{$fromUsername}';";
+                            $stmt = $pdo->exec($sql);
+                            $contentStr = "byebye!";
+                        }
+                        $pdo = null;
                     }
                     break;
 
-                    case "text":
+
+
+
+
+                    // case "text":
                     // switch ($keyword)
                     // {
                     //     case "1":
@@ -147,53 +192,70 @@
                     //     break;
                     // }
                     // break;
-                    switch ($keyword)
-                    {
-                        case "c":
-                        // $mysql = new SaeMysql();
-                        // $sql = "intsert into 'weixin' ('id', 'title', 'content') values (null, 'what is your name', 'who is your name');"
-                        // $mysql->runSql($sql);
-                        $contentStr = "insert a record success";
-                        break;
 
-                        case "d":
-                        $contentStr = "delete a record success";
-                        break;
+                    //mysql pdo practices
+                    // case "text":
+                    // switch ($keyword)
+                    // {
+                    //     case "c":
+                    //     // $mysql = new SaeMysql();
+                    //     // $sql = "insert into 'weixin' ('id', 'title', 'content') values (null, 'what is your name', 'who is your name');";
+                    //     // $mysql->runSql($sql);
+                    //     $sql = "insert into weixin (id,title,content) values (null, 'what is your name', 'who is your name');";
+                    //     $stmt = $pdo->exec($sql);
+                    //     $contentStr = "insert a record success";
+                    //     $pdo = null;
+                    //     break;
 
-                        case "u":
-                        $contentStr = "update a record success";
-                        break;
+                    //     case "d":
+                    //     $sql = "delete from weixin where title like '%what%';";
+                    //     $stmt = $pdo->exec($sql);
+                    //     $contentStr = "delete a record success";
+                    //     $pdo = null;
+                    //     break;
 
-                        case "r":
-                        // for mysql driver
-                        // if ($mysqli->connect_error) {
-                        //     exit($mysqli->connect_error);
-                        // }
-                        // $mysqli->close();
+                    //     case "u":
+                    //     $sql = "update weixin set content='why why why' where title='what is your name';";
+                    //     $stmt = $pdo->exec($sql);
+                    //     $contentStr = "update a record success";
+                    //     $pdo = null;
+                    //     break;
+
+                    //     case "r":
+                    //     // for mysql driver
+                    //     // if ($mysqli->connect_error) {
+                    //     //     exit($mysqli->connect_error);
+                    //     // }
+                    //     // $mysqli->close();
                     
-                        // for pdo
-                        // try {
-                            
-                            $sql = "select * from weixin where title = 'r'";
-                            foreach ($pdo->query($sql) as $row)
-                            {
-                                // $contentStr = "query a record success";
-                                $contentStr = $row['content'];
-                            }
-                        // } catch (PDOException $e) {
-                        //     //$contentStr = "error!";
-                        //     //$contentStr = $e->getMessage();
-                        //     //die(); exit();
-                        // } finally { //only php7+
-                        //     $pdo = null;//release this inst
-                        // }
-                        break;
+                    //     // for pdo
+                    //     // try {
+                        
+                    //     $sql = "select * from weixin where title = 'r';";
+                    //     $stmt = $pdo->query($sql);
+                    //     while ($row = $stmt->fetch()) {
+                    //         $contentStr = $row['content'];
+                    //     }
+                    //     // foreach ($pdo->query($sql) as $row)
+                    //     // {
+                    //     //     // $contentStr = "query a record success";
+                    //     //     $contentStr = $row['content'];
+                    //     // }
+                    //     $pdo = null;
+                    //     // } catch (PDOException $e) {
+                    //     //     //$contentStr = "error!";
+                    //     //     //$contentStr = $e->getMessage();
+                    //     //     //die(); exit();
+                    //     // } finally { //only php7+
+                    //     //     $pdo = null;//release this inst
+                    //     // }
+                    //     break;
 
-                        default:
-                        $contentStr = "nothing found!";
-                        break;
-                    }
-                    break;
+                    //     default:
+                    //     $contentStr = "nothing found!";
+                    //     break;
+                    // }
+                    // break;
 
                     // case "image":
                     // $picUrl = $postObj->picUrl;
@@ -223,7 +285,78 @@
                     // $title = $postObj->Title;
                     // $contentStr = "link title is ".$title;
                     // break;
-                }
+
+
+                    // case "text":
+                    // if ($keyword) 
+                    // {
+                    //     $sql = "select * from CRM where USER='{$fromUsername}';";
+                    //     $stmt = $pdo->query($sql);
+                    //     while ($row = $stmt->fetch()) {
+                    //         $user = $row['USER'];
+                    //     }
+                    //     if (empty($user))
+                    //     {
+                    //     $sql = "insert into CRM (ID,USER) values (null,'$fromUsername');";
+                    //     $stmt = $pdo->exec($sql);
+                    //     $contentStr = "welcome new user";
+                    //     $pdo = null;
+                    //     }
+                    //     else {
+                    //         $contentStr = "oh! my old friend";
+                    //     }
+                    // }
+
+
+                    case "text":
+                    if ($keyword == "@")
+                    {
+                        $sql = "update user set menu=0 where openid='{$fromUsername}';";
+                        $stmt = $pdo->exec($sql);
+                        $contentStr = "press 1 to AAA\n press 2 to BBB";
+                        $pdo = null;
+                    }
+                    else if ($keyword == "1")
+                    {
+                        $sql = "update user set menu=1 where openid='{$fromUsername}';";
+                        $stmt = $pdo->exec($sql);
+                        $contentStr = "AAA!!!";
+                        $pdo = null;
+                    }
+                    else if ($keyword == "2")
+                    {
+                        $sql = "update user set menu=2 where openid='{$fromUsername}';";
+                        $stmt = $pdo->exec($sql);
+                        $contentStr = "BBB???";
+                        $pdo = null;
+                    }
+                    else 
+                    {
+                        $sql = "select * from user where openid='{$fromUsername}';";
+                        $stmt = $pdo->query($sql);
+                        while ($row = $stmt->fetch()) {
+                            $menu = $row['menu'];
+                        }
+
+                        if (empty($menu))
+                        {
+                            $sql = "update user set menu=0 where openid='{$fromUsername}';";
+                            $stmt = $pdo->exec($sql);
+                            $contentStr = "press 1 to AAA\n press 2 to BBB";
+                            $pdo = null;
+                        }
+
+                        if ($menu == 1)
+                        {
+                            $contentStr = "AAA Got it!!!";
+                        }
+                        else if ($menu == 2)
+                        {
+                            $contentStr = "BBB Got it!!";
+                        }
+                    }
+                    break;
+                } /** switch case */
                 
                 $msgType = "text";
                 $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);

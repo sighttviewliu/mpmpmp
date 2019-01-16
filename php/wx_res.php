@@ -4,6 +4,11 @@
     ##$wechatObj->valid();  
     $wechatObj->responseMSG();
 
+    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    trigger_error("bbbbbbbbbbbbbbbbbbbbbbbbbbbb", E_USER_ERROR);
     class wechat {  
 
         public function valid() {  
@@ -34,7 +39,6 @@
 
         public function responseMSG() {
             //////////////////
-
             ##$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
             //huo de nei rong
             $postStr = file_get_contents('php://input');
@@ -348,7 +352,8 @@
 
                         if ($menu == 1)
                         {
-                            $contentStr = "AAA Got it!!!";
+                            //$contentStr = "AAA Got it!!!";
+                            $contentStr = "<a href=\"www.baidu.com\">baidu</a>\n\n<a href=\"www.sina.com.cn\">Sina</a>";
                         }
                         else if ($menu == 2)
                         {

@@ -4,11 +4,11 @@
     ##$wechatObj->valid();  
     $wechatObj->responseMSG();
 
-    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
-    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
-    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
-    error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
-    trigger_error("bbbbbbbbbbbbbbbbbbbbbbbbbbbb", E_USER_ERROR);
+    // error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    // error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    // error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    // error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+    // trigger_error("bbbbbbbbbbbbbbbbbbbbbbbbbbbb", E_USER_ERROR);
     class wechat {  
 
         public function valid() {  
@@ -40,6 +40,8 @@
         public function responseMSG() {
             //////////////////
             ##$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+
+            $mem = new Memcached();
             //huo de nei rong
             $postStr = file_get_contents('php://input');
             ##print("liulijin \n");
@@ -139,36 +141,36 @@
                     if ($event == "subscribe")
                     {
                         // $contentStr = "------ \n press 1 \n press 2 \n press 3";
-                        $sql = "select * from user where openid='{$fromUsername}';";
-                        $stmt = $pdo->query($sql);
-                        while ($row = $stmt->fetch()) {
-                            $user = $row['openid'];
-                        }
+                        // $sql = "select * from user where openid='{$fromUsername}';";
+                        // $stmt = $pdo->query($sql);
+                        // while ($row = $stmt->fetch()) {
+                        //     $user = $row['openid'];
+                        // }
 
-                        if (empty($user))
-                        {
-                            $sql = "insert into user (id,openid,menu) values (null,'$fromUsername',0);";
-                            $stmt = $pdo->exec($sql);
-                            $contentStr = "welcome new user\n press 1 to AAA\n press 2 to BBB";
-                        }
-                        $pdo = null;
+                        // if (empty($user))
+                        // {
+                        //     $sql = "insert into user (id,openid,menu) values (null,'$fromUsername',0);";
+                        //     $stmt = $pdo->exec($sql);
+                             $contentStr = "welcome new user\n press 1 to AAA\n press 2 to BBB";
+                        // }
+                        // $pdo = null;
                     }
                     else if ($event == "unsubscribe")
                     {
-                        $sql = "select * from user where openid='{$fromUsername}';";
-                        $stmt = $pdo->query($sql);
-                        while ($row = $stmt->fetch()) {
-                            $user = $row['openid'];
-                        }
+                    //     $sql = "select * from user where openid='{$fromUsername}';";
+                    //     $stmt = $pdo->query($sql);
+                    //     while ($row = $stmt->fetch()) {
+                    //         $user = $row['openid'];
+                    //     }
 
-                        //delete this user from db by openid
-                        if (!empty($user))
-                        {
-                            $sql = "delete from user where openid='{$fromUsername}';";
-                            $stmt = $pdo->exec($sql);
+                    //     //delete this user from db by openid
+                    //     if (!empty($user))
+                    //     {
+                    //         $sql = "delete from user where openid='{$fromUsername}';";
+                    //         $stmt = $pdo->exec($sql);
                             $contentStr = "byebye!";
-                        }
-                        $pdo = null;
+                        // }
+                        // $pdo = null;
                     }
                     break;
 
@@ -315,39 +317,43 @@
                     case "text":
                     if ($keyword == "@")
                     {
-                        $sql = "update user set menu=0 where openid='{$fromUsername}';";
-                        $stmt = $pdo->exec($sql);
+                        // $sql = "update user set menu=0 where openid='{$fromUsername}';";
+                        // $stmt = $pdo->exec($sql);
+                        $mem->set($fromUsername."key", "0");
                         $contentStr = "press 1 to AAA\n press 2 to BBB";
-                        $pdo = null;
+                        // $pdo = null;
                     }
                     else if ($keyword == "1")
                     {
-                        $sql = "update user set menu=1 where openid='{$fromUsername}';";
-                        $stmt = $pdo->exec($sql);
+                        // $sql = "update user set menu=1 where openid='{$fromUsername}';";
+                        // $stmt = $pdo->exec($sql);
+                        $mem->set($fromUsername."key", "1");
                         $contentStr = "AAA!!!";
-                        $pdo = null;
+                        // $pdo = null;
                     }
                     else if ($keyword == "2")
                     {
-                        $sql = "update user set menu=2 where openid='{$fromUsername}';";
-                        $stmt = $pdo->exec($sql);
+                        // $sql = "update user set menu=2 where openid='{$fromUsername}';";
+                        // $stmt = $pdo->exec($sql);
+                        $mem->set($fromUsername."key", "2");
                         $contentStr = "BBB???";
-                        $pdo = null;
+                        // $pdo = null;
                     }
                     else 
                     {
-                        $sql = "select * from user where openid='{$fromUsername}';";
-                        $stmt = $pdo->query($sql);
-                        while ($row = $stmt->fetch()) {
-                            $menu = $row['menu'];
-                        }
+                        // $sql = "select * from user where openid='{$fromUsername}';";
+                        // $stmt = $pdo->query($sql);
+                        // while ($row = $stmt->fetch()) {
+                        //     $menu = $row['menu'];
+                        // }
+                        $menu = $mem->get($fromUsername."key");
 
                         if (empty($menu))
                         {
-                            $sql = "update user set menu=0 where openid='{$fromUsername}';";
-                            $stmt = $pdo->exec($sql);
+                            // $sql = "update user set menu=0 where openid='{$fromUsername}';";
+                            // $stmt = $pdo->exec($sql);
                             $contentStr = "press 1 to AAA\n press 2 to BBB";
-                            $pdo = null;
+                            // $pdo = null;
                         }
 
                         if ($menu == 1)

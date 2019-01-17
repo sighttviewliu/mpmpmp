@@ -1,7 +1,7 @@
 <?php  
     define("TOKEN", "michaellaoliu"); //TOKEN值  
     $wechatObj = new wechat();  
-    ##$wechatObj->valid();  
+    ####$wechatObj->valid();  
     $wechatObj->responseMSG();
 
     // error_log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
@@ -22,14 +22,19 @@
       
         private function checkSignature() {  
 
+            if (!defined("TOKEN"))
+            {
+                throw new Exception('TOKEN is not defined');
+            }
+
             $signature = $_GET["signature"];  
             $timestamp = $_GET["timestamp"];  
             $nonce = $_GET["nonce"];  
             $token = TOKEN;  
             $tmpArr = array($token, $timestamp, $nonce);  
-            sort($tmpArr);  
-            $tmpStr = implode( $tmpArr );  
-            $tmpStr = sha1( $tmpStr );  
+            sort($tmpArr, SORT_STRING);  
+            $tmpStr = implode($tmpArr);  
+            $tmpStr = sha1($tmpStr);  
             if( $tmpStr == $signature ) {  
                 return true;  
             } else {  
@@ -38,14 +43,42 @@
         }  
 
         public function responseMSG() {
+
+            // foreach ($_GET as $key => $value) {
+            // //trigger_error("_GET = ".$_GET, E_USER_ERROR);
+            // error_log("_GET[key] = ".$key." _GET[value] = ".$value, 0);
+            // }
+            // foreach ($_POST as $key => $value) {
+            // //trigger_error("_POST = ".$_POST, E_USER_ERROR);
+            // error_log("_POST[key] = ".$key." _POST[value] = ".$value, 0);
+            // }
+            //copy from demo.php
+            include_once "wxBizMsgCrypt.php";
+            include_once "errorCode.php";
             //////////////////
             ##$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+            //copy from demo.php
+
+            $token = TOKEN;
+            $timeStamp = $_GET["timestamp"];
+            $nonce = $_GET["nonce"];
+            $msg_sign = $_GET["msg_signature"];//not from demo.php
+            #$encrypt_type = $_GET["encrypt_type"];//not from demo.php
+            #$signature = $_GET["signature"];//not from demo.php
+            #$openid = $_GET["openid"];//not from demo.php
+
+            $pc = new WXBizMsgCrypt($token, $encodingAesKey, $appId);
 
             $mem = new Memcached();
-            //huo de nei rong
+            //get content from socket
             $postStr = file_get_contents('php://input');
             ##print("liulijin \n");
-
+            ##error_log('----------------------', 0);
+            $msg = '';
+            $errCode = $pc->decryptMsg($msg_sign,$timeStamp,$nonce,$postStr,$msg);
+            if ($errCode == ErrorCode::$OK)
+            {
+            $postStr = $msg;
             if (!empty($postStr)) {
 
                 /////////xml xml xml
@@ -371,7 +404,17 @@
                 
                 $msgType = "text";
                 $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
-                echo $resultStr;
+                ###echo $resultStr;
+                $encryptMsg = '';
+                $errCode = $pc->encryptMsg($resultStr,$timestamp,$nonce,$encryptMsg);
+                if ($errCode == ErrorCode::$OK)
+                {
+                    echo $encryptMsg;
+                }
+                else
+                {
+                    print($errCode."\n");
+                }
 
                 // if ($keyword == "aaa")
                 // {
@@ -405,6 +448,7 @@
                 echo "";
                 exit;
             }
-        }
-    }  
+        }//errorCode
+        }//responseMSG
+    }//wechat class  
 ?>  

@@ -58,7 +58,9 @@
             //////////////////
             ##$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
             //copy from demo.php
-
+            $encodingAesKey = "";
+            $appId = "";
+            $appsecret = "";
             $token = TOKEN;
             $timeStamp = $_GET["timestamp"];
             $nonce = $_GET["nonce"];

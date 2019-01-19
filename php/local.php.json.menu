@@ -1,0 +1,147 @@
+https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
+
+{
+ "button":[
+ {
+       "name":"公共查询",
+       "sub_button":[
+        {
+           "type":"click",
+           "name":"天气查询",
+           "key":"tianQi"
+        },
+        {
+           "type":"click",
+           "name":"公交查询",
+           "key":"gongJiao"
+        },
+        {
+           "type":"click",
+           "name":"翻译",
+           "key":"fanYi"
+        }]
+  },
+  {
+       "name":"苏州本地",
+       "sub_button":[
+        {
+           "type":"click",
+           "name":"爱上苏州",
+           "key":"loveSuzhou"
+        },
+        {
+           "type":"click",
+           "name":"苏州景点",
+           "key":"suzhouScenic"
+        },
+        {
+           "type":"click",
+           "name":"苏州美食",
+           "key":"suzhouFood"
+        },
+        {
+           "type":"click",
+           "name":"住在苏州",
+           "key":"liveSuzhou"
+        }]
+   },
+   {
+       "type":"click",
+       "name":"联系我们",
+       "key":"lianxiUs"
+   }]
+}
+
+
+-------------------------------------------------------------
+{
+ "button":[             //button定义该结构为一个菜单
+  {
+       "name":"分支主菜单名",　　
+       "sub_button":[　　　　//sub_button定义子菜单
+        {
+           "type":"click",　　//按钮类型
+           "name":"分支子菜单名1",　　//菜单名称
+           "key":"loveSuzhou"　　//菜单key值
+        },
+        {
+           "type":"click",
+           "name":"分支子菜单名2",
+           "key":"liveSuzhou"
+        }]
+   },　　　　//菜单之间用 , 分隔
+   {
+       "type":"click",
+       "name":"独立菜单",
+       "key":"lianxiUs"
+   }]
+}
+
+----------------------------------------------------------
+"button": [
+        {
+            "name": "scancode",
+            "sub_button": [
+                {
+                    "type": "scancode_waitmsg",
+                    "name": "scan hint",
+                    "key": "rselfmenu_0_0",
+                    "sub_button": []
+                },
+                {
+                    "type": "scancode_push",
+                    "name": "scan push",
+                    "key": "rselfmenu_0_1",
+                    "sub_button": []
+                }
+                ]   
+        },
+        {
+            "name": "photo",
+            "sub_button": [
+                {
+                    "type": "pic_sysphoto",
+                    "name": "sys photo",
+                    "key": "rselfmenu_1_0",
+                    "sub_button": []
+                },
+                {
+                    "type": "pic_photo_or_album",
+                    "name": "photo album",
+                    "key": "rselfmenu_1_1",
+                    "sub_button": []
+                },
+                {
+                    "type": "pic_weixin",
+                    "name": "weixin album",
+                    "key": "rselfmenu_1_2",
+                    "sub_button": []
+                }
+                ]
+        },
+        {
+            "name": "other",
+            "sub_button": [
+
+                {
+                    "type": "view",
+                    "name": "view type",
+                    "url": "www.baidu.com"
+                },
+                {
+                    "type": "click",
+                    "name": "click type",
+                    "key": "click",
+                },
+                {
+                    "type": "location_select",
+                    "name": "location",
+                    "key": "rselfmenu_2_0",
+                }
+                ]
+        }
+        ]
+}
+
+
+
